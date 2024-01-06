@@ -1,0 +1,40 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+ij_visual_guides = 100,120
+
+[*.sql]
+max_line_length = 1000
+
+[*.php]
+indent_size = 4
+max_line_length = 120
+ij_php_align_assignments = false
+ij_php_align_class_constants = false
+ij_php_align_group_field_declarations = false
+ij_php_align_key_value_pairs = false
+ij_php_align_phpdoc_comments = false
+ij_php_align_phpdoc_param_names = false
+ij_php_blank_lines_after_class_header = 0
+ij_php_blank_lines_around_class = 0
+ij_php_blank_lines_before_class_end = 0
+ij_php_blank_lines_before_return_statement = 1
+ij_php_comma_after_last_array_element = true
+ij_php_force_short_declaration_array_style = true
+ij_php_keep_indents_on_empty_lines = false
+ij_php_new_line_after_php_opening_tag = false
+ij_php_phpdoc_blank_line_before_tags = true
+ij_php_phpdoc_blank_lines_around_parameters = false
+ij_php_phpdoc_keep_blank_lines = true
+ij_php_phpdoc_param_spaces_between_name_and_description = unset
+ij_php_phpdoc_param_spaces_between_tag_and_type = unset
+ij_php_phpdoc_use_fqcn = true
+ij_php_return_type_on_new_line = false
+
+[*.rpt]
+trim_trailing_whitespace = false
