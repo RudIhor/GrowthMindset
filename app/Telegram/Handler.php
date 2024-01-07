@@ -45,7 +45,7 @@ class Handler extends WebhookHandler
                 $data = [
                     'chat_id' => $from['id'],
                     'first_name' => $from['first_name'],
-                    'last_name' => $from['last_name'],
+                    'last_name' => $from['last_name'] ?? '',
                     'username' => $from['username'],
                 ];
                 TelegramUser::create($data);
@@ -81,7 +81,7 @@ class Handler extends WebhookHandler
         }
 
         $this->reply('Settings were successfully updated!');
-        Telegraph::message('Start receive your quotes: /subscribe')->chat($this->chat)->send();
+        Telegraph::chat($this->chat)->message('Start receive your quotes: /subscribe')->send();
     }
 
     public function settings(): void
@@ -123,7 +123,7 @@ class Handler extends WebhookHandler
                 'telegram_user_id' => $telegramUser->id,
                 'is_active' => SubscriptionType::ACTIVE->value,
             ]);
-            SendQuoteJob::dispatch($telegramUser)->delay(Time::Hour->value);
+            SendQuoteJob::dispatch($telegramUser)->delay(5);
         }
         $this->reply("You've just subscribed. Soon, you'll get your first quote!");
     }

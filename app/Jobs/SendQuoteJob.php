@@ -42,8 +42,8 @@ class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilPr
         if ($this->telegramUser->subscription->is_active) {
             $seconds = (int)config('timeschedule.notifications.' . $this->telegramUser->setting->notifications_per_day . '.step');
             if (now()->between($from, $to)) {
-                Telegraph::message($quoteService->getRandomQuoteMessage())
-                         ->chat($this->telegramUser->chat_id)
+                Telegraph::chat($this->telegramUser->chat_id)
+                         ->message($quoteService->getRandomQuoteMessage())
                          ->send();
             } else {
                 $seconds = (int)now()->diffInSeconds((new Carbon('tomorrow'))->setHours((int)config('timeschedule.from')));
