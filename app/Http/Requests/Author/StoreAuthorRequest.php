@@ -23,6 +23,7 @@ class StoreAuthorRequest extends FormRequest
     {
         return [
             'first_name' => ['required', 'min:1', 'max:255'],
+            'last_name' => ['min:1', 'max:255'],
         ];
     }
 }
