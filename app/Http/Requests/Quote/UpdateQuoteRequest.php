@@ -22,9 +22,9 @@ class UpdateQuoteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => ['required', 'min:5', 'max:255'],
-            'author_id' => ['required', 'integer'],
-            'category_id' => ['required', 'integer'],
+            'content' => ['min:5', 'max:255'],
+            'author_id' => ['integer'],
+            'category_id' => ['integer'],
         ];
     }
 }
