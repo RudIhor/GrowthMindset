@@ -29,7 +29,7 @@ class CategoryController extends Controller
      * @param \App\Models\Category $category
      * @return \App\Http\Resources\Category\CategoryResource
      */
-    public function view(Category $category): CategoryResource
+    public function show(Category $category): CategoryResource
     {
         return $this->categoryService->getCategory($category);
     }
