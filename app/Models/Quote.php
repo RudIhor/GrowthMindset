@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Author $author
  * @property-read \App\Models\Category $category
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @method static \Illuminate\Database\Eloquent\Builder inRandomOrder()
  * @method static \App\Models\Quote first()
  * @method static \App\Models\Quote create(array $data)
@@ -47,13 +46,5 @@ class Quote extends AbstractModel
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function tags(): BelongsToMany
-    {
-        return $this->belongsToMany(Tag::class);
     }
 }

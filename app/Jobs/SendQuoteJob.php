@@ -38,12 +38,18 @@ class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilPr
     {
         $from = (new Carbon('today'))->setHour((int)config('timeschedule.from.hours'));
         $to = (new Carbon('today'))->setHour((int)config('timeschedule.to.hours'));
+        $midnight = (new Carbon())->setHours(0)->setMinutes(0)->setSeconds(0);
         if ($this->telegramUser->subscription->is_active) {
             $seconds = (int)config('timeschedule.notifications.' . $this->telegramUser->setting->notifications_per_day . '.step');
             if (now()->between($from, $to)) {
                 Telegraph::chat($this->telegramUser->chat_id)
                          ->message($quoteService->getRandomQuoteMessage())
+                         ->silent()
                          ->send();
+            } elseif (now()->between($midnight, $from)) {
+                $seconds = (int)now()->diffInSeconds((new Carbon())
+                    ->setHours((int)config('timeschedule.from.hours'))
+                    ->setSeconds((int)config('timeschedule.from.seconds')));
             } else {
                 $seconds = (int)now()->diffInSeconds((new Carbon('tomorrow'))
                     ->setHours((int)config('timeschedule.from.hours'))

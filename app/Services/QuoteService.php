@@ -14,15 +14,11 @@ class QuoteService
     {
         /** @var Quote $quote */
         $quote = Quote::inRandomOrder()->first();
-        $tags = array_map(function ($tag) {
-            return $tag['name'];
-        }, $quote->tags->toArray());
 
-        return sprintf("*%s*\n🖋️: %s\n🗂️: %s\n🏷️: %s",
+        return sprintf("*%s*\n✍️: %s\n🗂️: %s",
             $quote->content,
             $quote->author->full_name,
             $quote->category->name,
-            implode(', ', $tags)
         );
     }
 
@@ -31,7 +27,7 @@ class QuoteService
      */
     public function getQuotes(): QuoteCollection
     {
-        return new QuoteCollection(Quote::paginate());
+        return new QuoteCollection(Quote::paginate(25));
     }
 
     /**
