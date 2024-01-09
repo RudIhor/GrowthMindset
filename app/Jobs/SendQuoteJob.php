@@ -36,8 +36,8 @@ class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilPr
      */
     public function handle(QuoteService $quoteService): void
     {
-        $from = (new Carbon('today'))->setHour((int)config('timeschedule.from'));
-        $to = (new Carbon('today'))->setHour((int)config('timeschedule.to'));
+        $from = (new Carbon('today'))->setHour((int)config('timeschedule.from.hours'));
+        $to = (new Carbon('today'))->setHour((int)config('timeschedule.to.hours'));
         if ($this->telegramUser->subscription->is_active) {
             $seconds = (int)config('timeschedule.notifications.' . $this->telegramUser->setting->notifications_per_day . '.step');
             if (now()->between($from, $to)) {
@@ -45,7 +45,9 @@ class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilPr
                          ->message($quoteService->getRandomQuoteMessage())
                          ->send();
             } else {
-                $seconds = (int)now()->diffInSeconds((new Carbon('tomorrow'))->setHours((int)config('timeschedule.from'))->setSeconds(10));
+                $seconds = (int)now()->diffInSeconds((new Carbon('tomorrow'))
+                    ->setHours((int)config('timeschedule.from.hours'))
+                    ->setSeconds((int)config('timeschedule.from.seconds')));
             }
             self::dispatch($this->telegramUser)->delay($seconds);
         }

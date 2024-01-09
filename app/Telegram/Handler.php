@@ -119,7 +119,7 @@ class Handler extends WebhookHandler
                 'telegram_user_id' => $telegramUser->id,
                 'is_active' => SubscriptionType::ACTIVE->value,
             ]);
-            SendQuoteJob::dispatch($telegramUser)->delay(5);
+            SendQuoteJob::dispatch($telegramUser)->delay(Time::Hour->value);
         }
         $this->reply("You've just subscribed. Soon, you'll get your first quote!");
     }
