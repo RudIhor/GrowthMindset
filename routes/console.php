@@ -34,5 +34,5 @@ Artisan::command('register-commands', function () {
 });
 
 Artisan::command('test', function (\App\Services\QuoteService $service) {
-    $service->getRandomQuoteMessage();
+    throw new Exception('Quote wasnot found');
 });
