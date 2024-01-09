@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\TelegramUser;
 use App\Services\QuoteService;
 use DefStudio\Telegraph\Facades\Telegraph;
-use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
@@ -46,7 +45,7 @@ class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilPr
                          ->message($quoteService->getRandomQuoteMessage())
                          ->send();
             } else {
-                $seconds = (int)now()->diffInSeconds((new Carbon('tomorrow'))->setHours((int)config('timeschedule.from')));
+                $seconds = (int)now()->diffInSeconds((new Carbon('tomorrow'))->setHours((int)config('timeschedule.from'))->setSeconds(10));
             }
             self::dispatch($this->telegramUser)->delay($seconds);
         }

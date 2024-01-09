@@ -40,17 +40,12 @@ class Handler extends WebhookHandler
     public function start(): void
     {
         if (!TelegramUser::chatId($this->chat->chat_id)->first() && !empty($this->message)) {
-            $data = [
-                'chat_id' => $this->message->chat()->id(),
-                'first_name' => $this->message->from()->firstName(),
-            ];
-            if (!empty($this->message->from()->lastName())) {
-                $data['last_name'] = $this->message->from()->lastName();
-            }
-            if (!empty($this->message->from()->username())) {
-                $data['username'] = $this->message->from()->username();
-            }
-            TelegramUser::create($data);
+            TelegramUser::create([
+                'chat_id' => $this->message->chat()?->id(),
+                'first_name' => $this->message->from()?->firstName(),
+                'last_name' => $this->message->from()?->lastName(),
+                'username' => $this->message->from()?->username(),
+            ]);
         }
 
         $this->reply("👋 Welcome to QuoteBo! I'm here to inspire and motivate you, making your day with awesome quotes. First, you need to set up your /settings to determine your preferences. After that, use /subscribe to start receiving your awesome quotes. If you have any questions or need assistance, feel free to type /help. Let's get started! 🚀");
