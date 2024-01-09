@@ -23,6 +23,11 @@ return [
             'step' => Time::Hour->value,
         ],
     ],
-    'from' => 6,
-    'to' => 19,
+    'from' => [
+        'hours' => 6,
+        'seconds' => 30,
+    ],
+    'to' => [
+        'hours' => 19,
+    ],
 ];

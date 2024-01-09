@@ -23,7 +23,7 @@ class SendQuotes extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         return $this->call('queue:work');
     }
