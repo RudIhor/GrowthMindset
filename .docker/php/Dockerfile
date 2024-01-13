@@ -40,4 +40,5 @@ RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/i
     docker-php-ext-install -j$(nproc) gd && \
     docker-php-ext-enable gd
 RUN pecl install apcu && docker-php-ext-enable apcu
+RUN pecl install excimer && docker-php-ext-enable excimer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
