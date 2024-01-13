@@ -22,7 +22,7 @@ class UpdateAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => ['required', 'min:1', 'max:255'],
+            'first_name' => ['min:1', 'max:255'],
             'last_name' => ['min:1', 'max:255'],
         ];
     }

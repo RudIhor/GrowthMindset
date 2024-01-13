@@ -23,8 +23,8 @@ class StoreQuoteRequest extends FormRequest
     {
         return [
             'content' => ['required', 'min:5', 'max:255'],
-            'author_id' => ['required', 'integer'],
-            'category_id' => ['required', 'integer'],
+            'author_id' => ['required', 'integer', 'exists:authors,id'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
         ];
     }
 }

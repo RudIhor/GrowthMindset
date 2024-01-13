@@ -10,7 +10,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $content
  * @property \App\Models\Author $author
  * @property \App\Models\Category $category
- * @property \App\Models\Tag[] $tags
  */
 class QuoteResource extends JsonResource
 {
@@ -26,7 +25,6 @@ class QuoteResource extends JsonResource
             'content' => $this->content,
             'author' => $this->author->full_name,
             'category' => $this->category->name,
-            'tags' => $this->tags,
         ];
     }
 }

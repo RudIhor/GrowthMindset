@@ -3,8 +3,6 @@
 use App\Http\Controllers\Api\AuthorController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\QuoteController;
-use App\Http\Controllers\Api\QuoteTagController;
-use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HealthController;
 use Illuminate\Support\Facades\Route;
@@ -22,8 +20,5 @@ Route::get('health', HealthController::class)->name('app.status');
 Route::middleware(['auth:api', 'role:admin'])->group(function() {
     Route::apiResource('authors', AuthorController::class);
     Route::apiResource('categories',CategoryController::class);
-    Route::apiResource('tags', TagController::class);
     Route::apiResource('quotes', QuoteController::class);
-    Route::apiResource('quote-tags', QuoteTagController::class)->except(['show', 'update']);
-    Route::get('quote-tags/{quote}', [QuoteTagController::class, 'show'])->name('quote-tags.show');
 });

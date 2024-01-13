@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $telegram_user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \App\Models\UserSetting create(array $data)
  */
 class UserSetting extends AbstractModel
 {

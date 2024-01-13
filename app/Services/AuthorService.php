@@ -17,7 +17,7 @@ class AuthorService
      */
     public function getAuthors(): AuthorCollection
     {
-        return new AuthorCollection(Author::paginate());
+        return new AuthorCollection(Author::paginate(25));
     }
 
     /**

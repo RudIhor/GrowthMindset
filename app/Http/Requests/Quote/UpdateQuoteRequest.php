@@ -23,8 +23,8 @@ class UpdateQuoteRequest extends FormRequest
     {
         return [
             'content' => ['min:5', 'max:255'],
-            'author_id' => ['integer'],
-            'category_id' => ['integer'],
+            'author_id' => ['integer', 'exists:authors,id'],
+            'category_id' => ['integer', 'exists:categories,id'],
         ];
     }
 }
