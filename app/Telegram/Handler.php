@@ -67,30 +67,32 @@ class Handler extends WebhookHandler
         $telegramUser = TelegramUser::chatId($this->chat->chat_id)->first();
         $notificationsPerDay = $this->data->get('number');
         if (empty($telegramUser->setting)) {
-            $userSettings = new UserSetting();
-            $userSettings->telegram_user_id = $telegramUser->id;
-            $userSettings->notifications_per_day = $notificationsPerDay;
-            $userSettings->save();
+            UserSetting::create([
+                'telegram_user_id' => $telegramUser->id,
+                'notifications_per_day' => $notificationsPerDay,
+            ]);
         } else {
             $telegramUser->setting->notifications_per_day = $notificationsPerDay;
             $telegramUser->setting->save();
         }
-
         $this->reply('Settings were successfully updated!');
+
         Telegraph::chat($this->chat)->message('Start receive your quotes: /subscribe')->send();
     }
 
     public function settings(): void
     {
         Telegraph::chat($this->chat)
-                 ->message('How many quote do you want to receive each day?')
+            ->message('How many quotes do you want to receive each day?')
                  ->keyboard(Keyboard::make()->buttons([
+                     Button::make('1')->action('setNotificationsAmount')->param('number', 1),
+                     Button::make('2')->action('setNotificationsAmount')->param('number', 2),
+                     Button::make('3')->action('setNotificationsAmount')->param('number', 3),
+                     Button::make('4')->action('setNotificationsAmount')->param('number', 4),
                      Button::make('5')->action('setNotificationsAmount')->param('number', 5),
                      Button::make('7')->action('setNotificationsAmount')->param('number', 7),
                      Button::make('9')->action('setNotificationsAmount')->param('number', 9),
                      Button::make('10')->action('setNotificationsAmount')->param('number', 10),
-                     Button::make('12')->action('setNotificationsAmount')->param('number', 12),
-                     Button::make('14')->action('setNotificationsAmount')->param('number', 14),
                  ]))
                  ->send();
     }

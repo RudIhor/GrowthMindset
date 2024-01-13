@@ -15,7 +15,7 @@ class CategoryService
      */
     public function getCategories(): CategoryCollection
     {
-        return new CategoryCollection(Category::paginate());
+        return new CategoryCollection(Category::paginate(25));
     }
 
     /**

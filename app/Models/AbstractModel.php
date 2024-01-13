@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder whereLastName($value)
- * @method static \Illuminate\Database\Eloquent\Builder paginate()
+ * @method static \Illuminate\Database\Eloquent\Builder paginate(int $count=15)
  * @mixin \Eloquent
  */
 class AbstractModel extends Model
