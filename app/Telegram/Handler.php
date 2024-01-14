@@ -2,6 +2,7 @@
 
 namespace App\Telegram;
 
+use App\Constants\Flag;
 use App\Enums\SubscriptionType;
 use App\Enums\Time;
 use App\Jobs\SendQuoteJob;
@@ -18,13 +19,6 @@ use Illuminate\Support\Stringable;
 
 class Handler extends WebhookHandler
 {
-    /**
-     * @var array<string, string>
-     */
-    private array $availableCommands = [
-        '/randomQuote' => 'Get a random awesome quote.',
-    ];
-
     public function __construct(private readonly QuoteService $quoteService)
     {
         parent::__construct();
@@ -32,73 +26,55 @@ class Handler extends WebhookHandler
 
     public function handleUnknownCommand(Stringable $text): void
     {
-        Log::info($text->value());
+        Log::channel('db')->info($text->value(), ['chat_id' => $this->chat->chat_id]);
 
-        $this->reply('Please, check the available commands: /help');
+        $this->reply(__('bot.handle_unknown_command', locale: $this->message?->from()?->languageCode()));
     }
 
     public function start(): void
     {
-        if (!TelegramUser::chatId($this->chat->chat_id)->first() && !empty($this->message)) {
+        $languageCode = $this->message?->from()?->languageCode();
+        if (!TelegramUser::chatId($this->chat->chat_id)->first()) {
             TelegramUser::create([
-                'chat_id' => $this->message->chat()?->id(),
-                'first_name' => $this->message->from()?->firstName(),
-                'last_name' => $this->message->from()?->lastName(),
-                'username' => $this->message->from()?->username(),
+                'chat_id' => $this->message?->chat()?->id(),
+                'first_name' => $this->message?->from()?->firstName(),
+                'last_name' => $this->message?->from()?->lastName(),
+                'username' => $this->message?->from()?->username(),
+                'language_code' => $languageCode,
             ]);
         }
 
-        $this->reply("👋 Welcome to QuoteBo! I'm here to inspire and motivate you, making your day with awesome quotes. First, you need to set up your /settings to determine your preferences. After that, use /subscribe to start receiving your awesome quotes. If you have any questions or need assistance, feel free to type /help. Let's get started! 🚀");
+        $this->reply(__('bot.welcome', locale: $languageCode));
     }
 
     public function help(): void
     {
-        $message = "*Here are all available commands:*\n";
-        foreach ($this->availableCommands as $command => $description) {
-            $message .= "\n" . $command . ' ' . $description;
-        }
-
-        $this->reply($message);
-    }
-
-    public function setNotificationsAmount(): void
-    {
-        /** @var TelegramUser $telegramUser */
-        $telegramUser = TelegramUser::chatId($this->chat->chat_id)->first();
-        $notificationsPerDay = $this->data->get('number');
-        if (empty($telegramUser->setting)) {
-            UserSetting::create([
-                'telegram_user_id' => $telegramUser->id,
-                'notifications_per_day' => $notificationsPerDay,
-            ]);
-        } else {
-            $telegramUser->setting->notifications_per_day = $notificationsPerDay;
-            $telegramUser->setting->save();
-        }
-        $this->reply('Settings were successfully updated!');
-
-        Telegraph::chat($this->chat)->message('Start receive your quotes: /subscribe')->send();
-    }
-
-    public function settings(): void
-    {
-        Telegraph::chat($this->chat)
-            ->message('How many quotes do you want to receive each day?')
-                 ->keyboard(Keyboard::make()->buttons([
-                     Button::make('1')->action('setNotificationsAmount')->param('number', 1),
-                     Button::make('2')->action('setNotificationsAmount')->param('number', 2),
-                     Button::make('3')->action('setNotificationsAmount')->param('number', 3),
-                     Button::make('4')->action('setNotificationsAmount')->param('number', 4),
-                     Button::make('5')->action('setNotificationsAmount')->param('number', 5),
-                     Button::make('7')->action('setNotificationsAmount')->param('number', 7),
-                     Button::make('9')->action('setNotificationsAmount')->param('number', 9),
-                     Button::make('10')->action('setNotificationsAmount')->param('number', 10),
-                 ]))
-                 ->send();
+        $this->reply($this->getDescription($this->message?->from()?->languageCode()));
     }
 
     /**
-     * @throws \Throwable
+     * @return void
+     */
+    public function settings(): void
+    {
+        $buttons = array_map(function ($value) {
+            return Button::make($value)->action('setNotificationsAmount')->param('number', $value);
+        }, config('quotes.available_options'));
+        $languages = array_map(function ($value) {
+            return Button::make(Flag::getEmoji($value))->action('setLanguageCode')->param('language_code', $value);
+        }, config('quotes.available_languages'));
+        Telegraph::chat($this->chat)
+            ->message(__('bot.how_many_quotes', locale: $this->message?->from()?->languageCode()))
+            ->keyboard(Keyboard::make()->buttons($buttons))
+            ->send();
+        Telegraph::chat($this->chat)
+            ->message(__('bot.choose_language', locale: $this->message?->from()?->languageCode()))
+            ->keyboard(Keyboard::make()->buttons($languages))
+            ->send();
+    }
+
+    /**
+     * @return void
      */
     public function subscribe(): void
     {
@@ -113,7 +89,7 @@ class Handler extends WebhookHandler
             }
         } else {
             if (empty($telegramUser->setting)) {
-                $this->reply("You have to setup: /settings");
+                $this->reply(__('bot.need_settings', locale: $this->message?->from()?->languageCode()));
 
                 return;
             }
@@ -123,9 +99,12 @@ class Handler extends WebhookHandler
             ]);
             SendQuoteJob::dispatch($telegramUser)->delay(Time::Hour->value);
         }
-        $this->reply("You've just subscribed. Soon, you'll get your first quote!");
+        $this->reply(__('bot.subscribed', locale: $this->message?->from()?->languageCode()));
     }
 
+    /**
+     * @return void
+     */
     public function unsubscribe(): void
     {
         /** @var TelegramUser $telegramUser */
@@ -136,11 +115,78 @@ class Handler extends WebhookHandler
             $subscription->save();
         }
 
-        $this->reply("You've just unsubscribed!");
+        $this->reply(__('bot.unsubscribed', locale: $this->message?->from()?->languageCode()));
     }
 
+    /**
+     * @return void
+     */
     public function randomQuote(): void
     {
-        $this->reply($this->quoteService->getRandomQuoteMessage());
+        /** @var TelegramUser $telegramUser */
+        $telegramUser = TelegramUser::chatId($this->chat->chat_id)->first();
+
+        $this->reply($this->quoteService->getRandomQuoteMessage($telegramUser->language_code));
+    }
+
+    /**
+     * @return void
+     */
+    public function mySettings(): void
+    {
+        /** @var TelegramUser $telegramUser */
+        $telegramUser = TelegramUser::chatId($this->chat->chat_id)->first();
+
+        $this->reply(
+            sprintf(__('bot.my_settings', locale: $this->message?->from()?->languageCode()),
+                $telegramUser->setting->notifications_per_day,
+                Flag::getEmoji($telegramUser->language_code))
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function setNotificationsAmount(): void
+    {
+        /** @var TelegramUser $telegramUser */
+        $telegramUser = TelegramUser::chatId($this->chat->chat_id)->first();
+        $notificationsPerDay = $this->data->get('number');
+        if (empty($telegramUser->setting)) {
+            UserSetting::create([
+                'telegram_user_id' => $telegramUser->id,
+                'notifications_per_day' => $notificationsPerDay,
+            ]);
+        } else {
+            $telegramUser->setting->notifications_per_day = $notificationsPerDay;
+            $telegramUser->setting->save();
+        }
+        $this->reply(__('bot.settings_updated', locale: $this->message?->from()?->languageCode()));
+
+        Telegraph::chat($this->chat)
+                 ->message(__('bot.start_receive', locale: $this->message?->from()?->languageCode()))
+                 ->send();
+    }
+
+    /**
+     * @return void
+     */
+    public function setLanguageCode(): void
+    {
+        /** @var TelegramUser $telegramUser */
+        $telegramUser = TelegramUser::chatId($this->chat->chat_id)->first();
+        $telegramUser->update([
+            'language_code' => $this->data->get('language_code'),
+        ]);
+        $this->reply(__('bot.language_updated', locale: $this->message?->from()?->languageCode()));
+    }
+
+    /**
+     * @param string|null $languageCode
+     * @return string
+     */
+    private function getDescription(?string $languageCode = 'en'): string
+    {
+        return __('bot.help', locale: $languageCode);
     }
 }

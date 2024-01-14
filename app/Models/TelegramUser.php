@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -15,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string|null $last_name
  * @property string|null $username
  * @property string $chat_id
+ * @property string $language_code
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \App\Models\UserSetting $setting
@@ -31,6 +31,7 @@ class TelegramUser extends AbstractModel
         'last_name',
         'username',
         'chat_id',
+        'language_code',
     ];
 
     public function scopeChatId(Builder $query, int|string $chatId): void

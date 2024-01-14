@@ -43,7 +43,7 @@ class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilPr
             $seconds = (int)config('timeschedule.notifications.' . $this->telegramUser->setting->notifications_per_day . '.step');
             if (now()->between($from, $to)) {
                 Telegraph::chat($this->telegramUser->chat_id)
-                         ->message($quoteService->getRandomQuoteMessage())
+                         ->message($quoteService->getRandomQuoteMessage($this->telegramUser->language_code))
                          ->silent()
                          ->send();
             } elseif (now()->between($midnight, $from)) {
