@@ -12,7 +12,8 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "sentry/sentry-laravel": "^4.1",
-        "tymon/jwt-auth": "^2.0"
+        "tymon/jwt-auth": "^2.0",
+        "yoeriboven/laravel-log-db": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
