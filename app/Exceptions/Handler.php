@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -27,6 +28,10 @@ class Handler extends ExceptionHandler
             if (app()->bound('sentry')) {
                 app('sentry')->captureException($e);
             }
+            Log::channel('db')->alert($e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
         });
     }
 }

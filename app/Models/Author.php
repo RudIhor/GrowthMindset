@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $first_name
  * @property string|null $last_name
- * @property string|null $full_name
+ * @property string $full_name
  * @method static \App\Models\Author create(array $data)
  */
 class Author extends AbstractModel

@@ -26,13 +26,7 @@ Artisan::command('register-commands', function () {
     $bot = TelegraphBot::find(1);
 
     $bot->registerCommands([
-        'help' => 'Get list of available commands',
-        'settings' => 'Set up your profile settings',
-        'subscribe' => 'Subscribe to get awesome quotes',
-        'unsubscribe' => 'Unsubscribe of getting quotes'
+        'start' => 'start your journey',
+        'help' => 'get list of available commands',
     ])->send();
-});
-
-Artisan::command('test', function (\App\Services\QuoteService $service) {
-    throw new Exception('Quote wasnot found');
 });

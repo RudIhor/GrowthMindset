@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Azure\Services\TranslatorService;
 use App\Http\Requests\Quote\StoreQuoteRequest;
 use App\Http\Requests\Quote\UpdateQuoteRequest;
 use App\Http\Resources\Quote\QuoteCollection;
@@ -10,15 +11,19 @@ use App\Models\Quote;
 
 class QuoteService
 {
-    public function getRandomQuoteMessage(): string
+    public function __construct(protected TranslatorService $translatorService)
+    {
+    }
+
+    public function getRandomQuoteMessage(string $languageCode = 'en'): string
     {
         /** @var Quote $quote */
         $quote = Quote::inRandomOrder()->first();
 
         return sprintf("*%s*\n✍️: %s\n🗂️: %s",
-            $quote->content,
-            $quote->author->full_name,
-            $quote->category->name,
+            $this->translatorService->translate($quote->content, $languageCode),
+            $this->translatorService->translate($quote->author->full_name, $languageCode),
+            $this->translatorService->translate($quote->category->name, $languageCode),
         );
     }
 
