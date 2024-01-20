@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Azure\Services\TranslatorService;
+use App\Enums\LanguageCode;
 use App\Http\Requests\Quote\StoreQuoteRequest;
 use App\Http\Requests\Quote\UpdateQuoteRequest;
 use App\Http\Resources\Quote\QuoteCollection;
@@ -20,11 +21,18 @@ class QuoteService
         /** @var Quote $quote */
         $quote = Quote::inRandomOrder()->first();
 
-        return sprintf("*%s*\n✍️: %s\n🗂️: %s",
-            $this->translatorService->translate($quote->content, $languageCode),
-            $this->translatorService->translate($quote->author->full_name, $languageCode),
-            $this->translatorService->translate($quote->category->name, $languageCode),
-        );
+        $text = $quote->content;
+        $authorName = $quote->author->full_name;
+        $categoryName = $quote->category->name;
+
+        if (LanguageCode::isTranslationable($languageCode)) {
+            $authorName = $this->translatorService->translate($quote->author->full_name, $languageCode);
+            $categoryName = $this->translatorService->translate($quote->category->name, $languageCode);
+            $text = $this->translatorService->translate($quote->author->full_name . ' said* ' . $quote->content, $languageCode);
+            $text = str_replace('*', '', substr($text, (int)strpos($text, '*') + 1));
+        }
+
+        return sprintf("*%s*\n✍️: %s\n🗂️: %s", $text, $authorName, $categoryName);
     }
 
     /**
