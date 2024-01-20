@@ -49,7 +49,7 @@ class Handler extends WebhookHandler
 
     public function help(): void
     {
-        $this->reply($this->getDescription($this->message?->from()?->languageCode()));
+        $this->reply(__('bot.help', locale: $this->message?->from()?->languageCode()));
     }
 
     /**
@@ -179,14 +179,5 @@ class Handler extends WebhookHandler
             'language_code' => $this->data->get('language_code'),
         ]);
         $this->reply(__('bot.language_updated', locale: $this->message?->from()?->languageCode()));
-    }
-
-    /**
-     * @param string|null $languageCode
-     * @return string
-     */
-    private function getDescription(?string $languageCode = 'en'): string
-    {
-        return __('bot.help', locale: $languageCode);
     }
 }

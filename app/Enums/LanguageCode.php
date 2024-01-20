@@ -8,4 +8,13 @@ enum LanguageCode: string
     case UK = 'uk';
     case ES = 'es';
     case DE = 'de';
+
+    public static function isTranslationable(string $languageCode): bool
+    {
+        return in_array($languageCode, [
+            self::DE->value,
+            self::ES->value,
+            self::UK->value,
+        ]);
+    }
 }
