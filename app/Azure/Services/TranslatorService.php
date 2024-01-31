@@ -34,7 +34,7 @@ class TranslatorService
                 ],
                 'json' => [['text' => $text]],
             ]);
-            $body = json_decode($response->getBody()->getContents(), true);
+            $body = json_decode(mb_convert_encoding($response->getBody()->getContents(), 'UTF-8', 'UTF-8'), true);
 
             return $body[0]['translations'][0]['text'];
         } catch (\Throwable $e) {

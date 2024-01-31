@@ -22,6 +22,8 @@ class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilPr
     use Queueable;
     use SerializesModels;
 
+    public int $tries = 5;
+
     /**
      * @param \App\Models\TelegramUser $telegramUser
      */
