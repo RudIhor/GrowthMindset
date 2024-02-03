@@ -22,13 +22,13 @@ class QuoteService
         $quote = Quote::inRandomOrder()->first();
 
         $text = $quote->content;
-        $authorName = $quote->author->full_name;
+        $authorName = $quote->author->full_name ?? '😉';
         $categoryName = $quote->category->name;
 
         if (LanguageCode::isTranslationable($languageCode)) {
-            $authorName = $this->translatorService->translate($quote->author->full_name, $languageCode);
-            $categoryName = $this->translatorService->translate($quote->category->name, $languageCode);
-            $text = $this->translatorService->translate($quote->author->full_name . ' said* ' . $quote->content, $languageCode);
+            $authorName = $this->translatorService->translate($authorName, $languageCode);
+            $categoryName = $this->translatorService->translate($categoryName, $languageCode);
+            $text = $this->translatorService->translate($quote->author->full_name ?? 'Somebody' . ' said* ' . $quote->content, $languageCode);
             $text = str_replace('*', '', substr($text, (int)strpos($text, '*') + 1));
         }
 
