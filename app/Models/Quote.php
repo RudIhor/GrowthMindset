@@ -12,11 +12,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  *
  * @property int $id
  * @property string $content
- * @property int $author_id
+ * @property ?int $author_id
  * @property int $category_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Author $author
+ * @property-read \App\Models\Author|null $author
  * @property-read \App\Models\Category $category
  * @method static \Illuminate\Database\Eloquent\Builder inRandomOrder()
  * @method static \App\Models\Quote first()
