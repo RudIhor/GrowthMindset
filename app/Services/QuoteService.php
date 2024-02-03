@@ -22,14 +22,14 @@ class QuoteService
         $quote = Quote::inRandomOrder()->first();
 
         $text = $quote->content;
-        $authorName = $quote->author->full_name;
+        $authorName = $quote->author->full_name ?? '😉';
         $categoryName = $quote->category->name;
 
         if (LanguageCode::isTranslationable($languageCode)) {
-            $authorName = $this->translatorService->translate($quote->author->full_name, $languageCode);
-            $categoryName = $this->translatorService->translate($quote->category->name, $languageCode);
-            $text = $this->translatorService->translate(sprintf('%s said* "%s"',$quote->author->full_name, $quote->content), $languageCode);
-            $text = str_replace('*', '', substr($text, (int)strpos($text, '*') + 3));
+            $authorName = $this->translatorService->translate($authorName, $languageCode);
+            $categoryName = $this->translatorService->translate($categoryName, $languageCode);
+            $text = $this->translatorService->translate($quote->author->full_name ?? 'Somebody' . ' said* ' . $quote->content, $languageCode);
+            $text = str_replace('*', '', substr($text, (int)strpos($text, '*') + 1));
         }
 
         return sprintf("*%s*\n✍️: %s\n🗂️: %s", $text, $authorName, $categoryName);

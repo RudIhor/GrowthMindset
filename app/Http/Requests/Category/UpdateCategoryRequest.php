@@ -22,7 +22,7 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['min:5', 'max:255'],
+            'name' => ['min:3', 'max:255', 'unique:categories,name'],
         ];
     }
 }
