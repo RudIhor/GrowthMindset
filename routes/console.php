@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Quote;
 use DefStudio\Telegraph\Models\TelegraphBot;
-use GuzzleHttp\Client;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -29,4 +27,8 @@ Artisan::command('register-commands', function () {
         'start' => 'start your journey',
         'help' => 'get list of available commands',
     ])->send();
+});
+
+Artisan::command('test', function () {
+    // Ad-hoc testing
 });
