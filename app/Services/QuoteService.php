@@ -32,7 +32,7 @@ class QuoteService
                 $text = $quote->author?->full_name . ' said* ' . $quote->content;
             }
             $text = $this->translatorService->translate($text, $languageCode);
-            $text = str_replace('*', '', substr($text, (int)strpos($text, '*') + 2));
+            $text = str_replace('*', '', substr($text, (int)strpos($text, '*')));
         }
 
         return sprintf("*%s*\n✍️: %s\n🗂️: %s", $text, $authorName, $categoryName);
