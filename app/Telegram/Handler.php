@@ -38,7 +38,9 @@ class Handler extends WebhookHandler
 
     protected function setupChat(): void
     {
-        $this->languageCode = $this->message?->from()?->languageCode() ?? LanguageCode::EN->value;
+        $this->languageCode = TelegramUser::whereChatId((string) $this->message?->from()?->id())->first()->language_code
+            ?? $this->message?->from()?->languageCode()
+            ?? LanguageCode::EN->value;
         $this->messageService = new MessageService($this->languageCode);
         parent::setupChat();
     }
