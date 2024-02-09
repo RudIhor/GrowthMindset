@@ -38,7 +38,7 @@ class TranslatorService
 
             return $body[0]['translations'][0]['text'];
         } catch (\Throwable $e) {
-            Log::channel('db')->alert($e->getMessage(), [
+            Log::alert('Client: {client} | Text: {text} | Target language: {target_language}', [
                 'client' => $this->client,
                 'text' => $text,
                 'targetLanguage' => $targetLanguage,

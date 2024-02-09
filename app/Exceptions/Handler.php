@@ -28,10 +28,6 @@ class Handler extends ExceptionHandler
             if (app()->bound('sentry')) {
                 app('sentry')->captureException($e);
             }
-            Log::channel('db')->alert($e->getMessage(), [
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ]);
         });
     }
 }
