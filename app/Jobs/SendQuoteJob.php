@@ -2,9 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Actions\Quote\SendQuoteAction;
 use App\Models\TelegramUser;
 use App\Services\QuoteService;
-use DefStudio\Telegraph\Facades\Telegraph;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
@@ -13,7 +13,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Carbon;
 
 class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilProcessing
 {
@@ -27,38 +26,15 @@ class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilPr
     /**
      * @param \App\Models\TelegramUser $telegramUser
      */
-    public function __construct(
-        private readonly TelegramUser $telegramUser
-    ) {
-    }
+    public function __construct(private readonly TelegramUser $telegramUser) {}
 
     /**
-     * @param \App\Services\QuoteService $quoteService
+     * @param QuoteService $quoteService
      * @return void
      */
     public function handle(QuoteService $quoteService): void
     {
-        $from = (new Carbon('today'))->setHour((int)config('timeschedule.from.hours'));
-        $to = (new Carbon('today'))->setHour((int)config('timeschedule.to.hours'));
-        $midnight = (new Carbon())->setHours(0)->setMinutes(0)->setSeconds(0);
-        if ($this->telegramUser->subscription->is_active) {
-            $seconds = (int)config('timeschedule.notifications.' . $this->telegramUser->setting->notifications_per_day . '.step');
-            if (now()->between($from, $to)) {
-                Telegraph::chat($this->telegramUser->chat_id)
-                         ->message($quoteService->getRandomQuoteMessage($this->telegramUser->language_code))
-                         ->silent()
-                         ->send();
-            } elseif (now()->between($midnight, $from)) {
-                $seconds = (int)now()->diffInSeconds((new Carbon())
-                    ->setHours((int)config('timeschedule.from.hours'))
-                    ->setSeconds((int)config('timeschedule.from.seconds')));
-            } else {
-                $seconds = (int)now()->diffInSeconds((new Carbon('tomorrow'))
-                    ->setHours((int)config('timeschedule.from.hours'))
-                    ->setSeconds((int)config('timeschedule.from.seconds')));
-            }
-            self::dispatch($this->telegramUser)->delay($seconds);
-        }
+        (new SendQuoteAction($this->telegramUser))->execute($quoteService);
     }
 
     /**

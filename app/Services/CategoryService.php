@@ -2,58 +2,26 @@
 
 namespace App\Services;
 
-use App\Http\Requests\Category\StoreCategoryRequest;
-use App\Http\Requests\Category\UpdateCategoryRequest;
-use App\Http\Resources\Category\CategoryCollection;
-use App\Http\Resources\Category\CategoryResource;
+use App\DTOs\Category\StoreCategoryDTO;
 use App\Models\Category;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class CategoryService
 {
     /**
-     * @return \App\Http\Resources\Category\CategoryCollection
+     * @return PaginatedDataCollection
      */
-    public function getCategories(): CategoryCollection
+    public function getCategories(): PaginatedDataCollection
     {
-        return new CategoryCollection(Category::paginate(25));
+        return StoreCategoryDTO::collection(Category::query()->paginate(25));
     }
 
     /**
-     * @param \App\Models\Category $category
-     * @return \App\Http\Resources\Category\CategoryResource
+     * @param Category $category
+     * @return StoreCategoryDTO
      */
-    public function getCategory(Category $category): CategoryResource
+    public function getCategory(Category $category): StoreCategoryDTO
     {
-        return new CategoryResource($category);
-    }
-
-    /**
-     * @param \App\Http\Requests\Category\StoreCategoryRequest $request
-     * @return \App\Models\Category
-     */
-    public function create(StoreCategoryRequest $request): Category
-    {
-        return Category::create($request->validated());
-    }
-
-    /**
-     * @param \App\Http\Requests\Category\UpdateCategoryRequest $request
-     * @param \App\Models\Category $category
-     * @return \App\Models\Category
-     */
-    public function update(UpdateCategoryRequest $request, Category $category): Category
-    {
-        $category->update($request->validated());
-
-        return $category;
-    }
-
-    /**
-     * @param \App\Models\Category $category
-     * @return bool|null
-     */
-    public function delete(Category $category): ?bool
-    {
-        return $category->delete();
+        return StoreCategoryDTO::from($category);
     }
 }

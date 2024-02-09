@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Quote\CreateQuoteAction;
+use App\Actions\Quote\DeleteQuoteAction;
+use App\Actions\Quote\UpdateQuoteAction;
+use App\DTOs\Quote\StoreQuoteDTO;
+use App\DTOs\Quote\UpdateQuoteDTO;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Quote\StoreQuoteRequest;
-use App\Http\Requests\Quote\UpdateQuoteRequest;
-use App\Http\Resources\Quote\QuoteCollection;
-use App\Http\Resources\Quote\QuoteResource;
 use App\Models\Quote;
 use App\Services\QuoteService;
 use Illuminate\Http\JsonResponse;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class QuoteController extends Controller
 {
@@ -18,49 +20,52 @@ class QuoteController extends Controller
     }
 
     /**
-     * @return \App\Http\Resources\Quote\QuoteCollection
+     * @return PaginatedDataCollection
      */
-    public function index(): QuoteCollection
+    public function index(): PaginatedDataCollection
     {
         return $this->quoteService->getQuotes();
     }
 
     /**
-     * @param \App\Models\Quote $quote
-     * @return \App\Http\Resources\Quote\QuoteResource
+     * @param Quote $quote
+     * @return \App\DTOs\Quote\StoreQuoteDTO
      */
-    public function show(Quote $quote): QuoteResource
+    public function show(Quote $quote): StoreQuoteDTO
     {
         return $this->quoteService->getQuote($quote);
     }
 
     /**
-     * @param \App\Http\Requests\Quote\StoreQuoteRequest $request
-     * @return \App\Models\Quote
+     * @param StoreQuoteDTO $quoteDTO
+     * @param CreateQuoteAction $createQuoteAction
+     * @return Quote
      */
-    public function store(StoreQuoteRequest $request): Quote
+    public function store(StoreQuoteDTO $quoteDTO, CreateQuoteAction $createQuoteAction): Quote
     {
-        return $this->quoteService->create($request);
+        return $createQuoteAction->execute($quoteDTO);
     }
 
     /**
-     * @param \App\Models\Quote $quote
-     * @param \App\Http\Requests\Quote\UpdateQuoteRequest $request
-     * @return \App\Models\Quote
+     * @param Quote $quote
+     * @param UpdateQuoteDTO $quoteDTO
+     * @param UpdateQuoteAction $updateQuoteAction
+     * @return Quote
      */
-    public function update(Quote $quote, UpdateQuoteRequest $request): Quote
+    public function update(Quote $quote, UpdateQuoteDTO $quoteDTO, UpdateQuoteAction $updateQuoteAction): Quote
     {
-        return $this->quoteService->update($request, $quote);
+        return $updateQuoteAction->execute($quoteDTO, $quote);
     }
 
     /**
-     * @param \App\Models\Quote $quote
-     * @return \Illuminate\Http\JsonResponse
+     * @param Quote $quote
+     * @param DeleteQuoteAction $deleteQuoteAction
+     * @return JsonResponse
      */
-    public function destroy(Quote $quote): JsonResponse
+    public function destroy(Quote $quote, DeleteQuoteAction $deleteQuoteAction): JsonResponse
     {
         return response()->json([
-            'message' => $this->quoteService->delete($quote) ? 'success' : 'fail',
+            'message' => $deleteQuoteAction->execute($quote) ? 'success' : 'fail',
         ]);
     }
 }
