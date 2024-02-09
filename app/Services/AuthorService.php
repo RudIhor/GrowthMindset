@@ -2,60 +2,26 @@
 
 namespace App\Services;
 
-use App\Http\Requests\Author\StoreAuthorRequest;
-use App\Http\Requests\Author\UpdateAuthorRequest;
-use App\Http\Resources\Author\AuthorCollection;
-use App\Http\Resources\Author\AuthorResource;
+use App\DTOs\Author\StoreAuthorDTO;
 use App\Models\Author;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class AuthorService
 {
     /**
-     * @return \App\Http\Resources\Author\AuthorCollection
+     * @return PaginatedDataCollection
      */
-    public function getAuthors(): AuthorCollection
+    public function getAuthors(): PaginatedDataCollection
     {
-        return new AuthorCollection(Author::paginate(25));
+        return StoreAuthorDTO::collection(Author::query()->paginate(25));
     }
 
     /**
-     * @param \App\Models\Author $author
-     * @return \App\Http\Resources\Author\AuthorResource
+     * @param Author $author
+     * @return \App\DTOs\Author\StoreAuthorDTO
      */
-    public function getAuthor(Author $author): AuthorResource
+    public function getAuthor(Author $author): StoreAuthorDTO
     {
-        return new AuthorResource($author);
-    }
-
-    /**
-     * @param \App\Http\Requests\Author\StoreAuthorRequest $request
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Builder
-     */
-    public function create(StoreAuthorRequest $request): Model|Builder
-    {
-        return Author::query()->create($request->validated());
-    }
-
-    /**
-     * @param \App\Http\Requests\Author\UpdateAuthorRequest $request
-     * @param \App\Models\Author $author
-     * @return \App\Models\Author
-     */
-    public function update(UpdateAuthorRequest $request, Author $author): Author
-    {
-        $author->update($request->validated());
-
-        return $author;
-    }
-
-    /**
-     * @param \App\Models\Author $author
-     * @return bool|null
-     */
-    public function delete(Author $author): ?bool
-    {
-        return $author->delete();
+        return StoreAuthorDTO::from($author);
     }
 }

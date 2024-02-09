@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Author\{CreateAuthorAction, DeleteAuthorAction, UpdateAuthorAction};
+use App\DTOs\Author\{StoreAuthorDTO, UpdateAuthorDTO};
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Author\StoreAuthorRequest;
-use App\Http\Requests\Author\UpdateAuthorRequest;
-use App\Http\Resources\Author\AuthorCollection;
-use App\Http\Resources\Author\AuthorResource;
 use App\Models\Author;
 use App\Services\AuthorService;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class AuthorController extends Controller
 {
@@ -21,49 +18,52 @@ class AuthorController extends Controller
     }
 
     /**
-     * @return \App\Http\Resources\Author\AuthorCollection
+     * @return PaginatedDataCollection
      */
-    public function index(): AuthorCollection
+    public function index(): PaginatedDataCollection
     {
         return $this->authorService->getAuthors();
     }
 
     /**
-     * @param \App\Models\Author $author
-     * @return \App\Http\Resources\Author\AuthorResource
+     * @param Author $author
+     * @return \App\DTOs\Author\StoreAuthorDTO
      */
-    public function show(Author $author): AuthorResource
+    public function show(Author $author): StoreAuthorDTO
     {
         return $this->authorService->getAuthor($author);
     }
 
     /**
-     * @param \App\Http\Requests\Author\StoreAuthorRequest $request
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @param StoreAuthorDTO $authorDTO
+     * @param CreateAuthorAction $createAuthorAction
+     * @return Builder|Model
      */
-    public function store(StoreAuthorRequest $request): Model|Builder
+    public function store(StoreAuthorDTO $authorDTO, CreateAuthorAction $createAuthorAction): Model|Builder
     {
-        return $this->authorService->create($request);
+        return $createAuthorAction->execute($authorDTO);
     }
 
     /**
-     * @param \App\Http\Requests\Author\UpdateAuthorRequest $request
-     * @param \App\Models\Author $author
-     * @return \App\Models\Author
+     * @param Author $author
+     * @param UpdateAuthorDTO $authorDTO
+     * @param UpdateAuthorAction $updateAuthorAction
+     * @return Author
      */
-    public function update(Author $author, UpdateAuthorRequest $request): Author
+    public function update(Author $author, UpdateAuthorDTO $authorDTO, UpdateAuthorAction $updateAuthorAction): Author
     {
-        return $this->authorService->update($request, $author);
+        return $updateAuthorAction->execute($authorDTO, $author);
     }
 
     /**
-     * @param \App\Models\Author $author
-     * @return \Illuminate\Http\JsonResponse
+     * @param Author $author
+     * @param DeleteAuthorAction $deleteAuthorAction
+     * @return JsonResponse
      */
-    public function destroy(Author $author): JsonResponse
+    public function destroy(Author $author, DeleteAuthorAction $deleteAuthorAction): JsonResponse
     {
         return response()->json([
-            'message' => $this->authorService->delete($author) ? 'success' : 'fail'
+            'message' => $deleteAuthorAction->execute($author) ? 'success' : 'fail',
         ]);
     }
 }

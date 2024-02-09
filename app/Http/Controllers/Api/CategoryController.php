@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Category\{CreateCategoryAction, DeleteCategoryAction, UpdateCategoryAction};
+use App\DTOs\Category\{StoreCategoryDTO, UpdateCategoryDTO};
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Category\StoreCategoryRequest;
-use App\Http\Requests\Category\UpdateCategoryRequest;
-use App\Http\Resources\Category\CategoryCollection;
-use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class CategoryController extends Controller
 {
@@ -18,49 +17,52 @@ class CategoryController extends Controller
     }
 
     /**
-     * @return \App\Http\Resources\Category\CategoryCollection
+     * @return PaginatedDataCollection
      */
-    public function index(): CategoryCollection
+    public function index(): PaginatedDataCollection
     {
         return $this->categoryService->getCategories();
     }
 
     /**
-     * @param \App\Models\Category $category
-     * @return \App\Http\Resources\Category\CategoryResource
+     * @param Category $category
+     * @return StoreCategoryDTO
      */
-    public function show(Category $category): CategoryResource
+    public function show(Category $category): StoreCategoryDTO
     {
         return $this->categoryService->getCategory($category);
     }
 
     /**
-     * @param \App\Http\Requests\Category\StoreCategoryRequest $request
-     * @return \App\Models\Category
+     * @param StoreCategoryDTO $categoryDTO
+     * @param CreateCategoryAction $createCategoryAction
+     * @return Category
      */
-    public function store(StoreCategoryRequest $request): Category
+    public function store(StoreCategoryDTO $categoryDTO, CreateCategoryAction $createCategoryAction): Category
     {
-        return $this->categoryService->create($request);
+        return $createCategoryAction->execute($categoryDTO);
     }
 
     /**
-     * @param \App\Models\Category $category
-     * @param \App\Http\Requests\Category\UpdateCategoryRequest $request
-     * @return \App\Models\Category
+     * @param Category $category
+     * @param UpdateCategoryDTO $categoryDTO
+     * @param UpdateCategoryAction $updateCategoryAction
+     * @return Category
      */
-    public function update(Category $category, UpdateCategoryRequest $request): Category
+    public function update(Category $category, UpdateCategoryDTO $categoryDTO, UpdateCategoryAction $updateCategoryAction): Category
     {
-        return $this->categoryService->update($request, $category);
+        return $updateCategoryAction->execute($categoryDTO, $category);
     }
 
     /**
-     * @param \App\Models\Category $category
-     * @return \Illuminate\Http\JsonResponse
+     * @param Category $category
+     * @param DeleteCategoryAction $deleteCategoryAction
+     * @return JsonResponse
      */
-    public function destroy(Category $category): JsonResponse
+    public function destroy(Category $category, DeleteCategoryAction $deleteCategoryAction): JsonResponse
     {
         return response()->json([
-            'message' => $this->categoryService->delete($category) ? 'success' : 'fail'
+            'message' => $deleteCategoryAction->execute($category) ? 'success' : 'fail'
         ]);
     }
 }

@@ -10,7 +10,6 @@ return [
     'how_many_quotes' => 'How many quotes do you want to receive each day?',
     'choose_language' => 'Choose your language',
     'language_updated' => 'Language was successfully updated!',
-    'settings_updated' => 'Settings were successfully updated!',
-    'start_receive' => 'Start receive your quotes: /subscribe',
+    'start_receive' => 'Settings were successfully updated! Start receive your quotes: /subscribe',
     'my_settings' => "*Amount of quotes per day:* *%s* \n\n*Language*: *%s*",
 ];
