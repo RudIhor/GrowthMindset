@@ -1,6 +1,6 @@
 # GrowthMindset
 
-### Goal:
+### Goal
 
 This bot is developed to help people with inspiration because even if one quote would inspire you and make your day
 and you make some good affairs
