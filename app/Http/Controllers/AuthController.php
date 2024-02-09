@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Auth\LoginRequest;
+use App\DTOs\Auth\StoreLoginDTO;
 use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\JsonResponse;
@@ -19,15 +19,15 @@ class AuthController extends Controller
     }
 
     /**
-     * @param \App\Http\Requests\Auth\LoginRequest $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param StoreLoginDTO $loginDTO
+     * @return JsonResponse
      */
-    public function login(LoginRequest $request): JsonResponse
+    public function login(StoreLoginDTO $loginDTO): JsonResponse
     {
-        if (!$token = auth()->attempt($request->validated())) {
+        if (!$token = auth()->attempt($loginDTO->toArray())) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Unauthorized',
+                'message' => 'Unauthenticated',
             ], 401);
         }
         $user = Auth::user();
@@ -36,7 +36,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function me(): JsonResponse
     {
@@ -44,7 +44,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function refresh(): JsonResponse
     {
@@ -53,7 +53,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function logout(): JsonResponse
     {
@@ -63,9 +63,9 @@ class AuthController extends Controller
     }
 
     /**
-     * @param \App\Models\User|\Illuminate\Contracts\Auth\Authenticatable|null $user
+     * @param User|Authenticatable|null $user
      * @param string $token
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     protected function respondWithUserAndToken(User|Authenticatable|null $user, string $token): JsonResponse
     {

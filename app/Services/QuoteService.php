@@ -3,26 +3,22 @@
 namespace App\Services;
 
 use App\Azure\Services\TranslatorService;
+use App\DTOs\Quote\StoreQuoteDTO;
 use App\Enums\LanguageCode;
-use App\Http\Requests\Quote\StoreQuoteRequest;
-use App\Http\Requests\Quote\UpdateQuoteRequest;
-use App\Http\Resources\Quote\QuoteCollection;
-use App\Http\Resources\Quote\QuoteResource;
 use App\Models\Quote;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class QuoteService
 {
-    public function __construct(protected TranslatorService $translatorService)
-    {
-    }
+    public function __construct(protected TranslatorService $translatorService) {}
 
     public function getRandomQuoteMessage(string $languageCode = 'en'): string
     {
         /** @var Quote $quote */
-        $quote = Quote::inRandomOrder()->first();
+        $quote = Quote::query()->inRandomOrder()->first();
 
         $text = $quote->content;
-        $authorName = $quote->author->full_name ?? '😉';
+        $authorName = $quote->author->full_name ?? '👤';
         $categoryName = $quote->category->name;
 
         if (LanguageCode::isTranslationable($languageCode)) {
@@ -41,49 +37,19 @@ class QuoteService
     }
 
     /**
-     * @return \App\Http\Resources\Quote\QuoteCollection
+     * @return PaginatedDataCollection
      */
-    public function getQuotes(): QuoteCollection
+    public function getQuotes(): PaginatedDataCollection
     {
-        return new QuoteCollection(Quote::paginate(25));
+        return StoreQuoteDTO::collection(Quote::query()->paginate(25));
     }
 
     /**
-     * @param \App\Models\Quote $quote
-     * @return \App\Http\Resources\Quote\QuoteResource
+     * @param Quote $quote
+     * @return StoreQuoteDTO
      */
-    public function getQuote(Quote $quote): QuoteResource
+    public function getQuote(Quote $quote): StoreQuoteDTO
     {
-        return new QuoteResource($quote);
-    }
-
-    /**
-     * @param \App\Http\Requests\Quote\StoreQuoteRequest $request
-     * @return \App\Models\Quote
-     */
-    public function create(StoreQuoteRequest $request): Quote
-    {
-        return Quote::create($request->validated());
-    }
-
-    /**
-     * @param \App\Http\Requests\Quote\UpdateQuoteRequest $request
-     * @param \App\Models\Quote $quote
-     * @return \App\Models\Quote
-     */
-    public function update(UpdateQuoteRequest $request, Quote $quote): Quote
-    {
-        $quote->update($request->validated());
-
-        return $quote;
-    }
-
-    /**
-     * @param \App\Models\Quote $quote
-     * @return bool|null
-     */
-    public function delete(Quote $quote): ?bool
-    {
-        return $quote->delete();
+        return StoreQuoteDTO::from($quote);
     }
 }

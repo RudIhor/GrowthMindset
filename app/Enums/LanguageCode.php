@@ -17,4 +17,14 @@ enum LanguageCode: string
             self::UK->value,
         ]);
     }
+
+    public function emoji(): string
+    {
+        return match($this) {
+            self::EN => '🇺🇸',
+            self::UK => '🇺🇦',
+            self::ES => '🇪🇸',
+            self::DE => '🇩🇪',
+        };
+    }
 }

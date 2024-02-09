@@ -13,9 +13,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $first_name
  * @property string|null $last_name
  * @property string $full_name
- * @method static \App\Models\Author create(array $data)
+ * @method static \Illuminate\Database\Eloquent\Builder|Author newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Author newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Author query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Author whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Author whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Author whereLastName($value)
+ * @mixin \Eloquent
  */
-class Author extends AbstractModel
+class Author extends Model
 {
     use HasFactory;
 
@@ -27,7 +33,9 @@ class Author extends AbstractModel
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     * Get Author's full name
+     *
+     * @return Attribute
      */
     public function fullName(): Attribute
     {

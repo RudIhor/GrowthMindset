@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Builders\TelegramUserBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Query\Builder;
 
 /**
  * App\Models\TelegramUser
@@ -13,16 +15,26 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $first_name
  * @property string|null $last_name
  * @property string|null $username
- * @property string $chat_id
- * @property string $language_code
+ * @property int $chat_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \App\Models\UserSetting $setting
- * @property \App\Models\Subscription $subscription
- * @method static \Illuminate\Database\Eloquent\Builder|void chatId(string|int $chatId)
- * @method static \App\Models\TelegramUser create(array $data)
+ * @property string $language_code
+ * @property-read \App\Models\UserSetting $setting
+ * @property-read \App\Models\Subscription $subscription
+ * @method static TelegramUserBuilder|TelegramUser newModelQuery()
+ * @method static TelegramUserBuilder|TelegramUser newQuery()
+ * @method static TelegramUserBuilder|TelegramUser query()
+ * @method static TelegramUserBuilder|TelegramUser whereChatId($value)
+ * @method static TelegramUserBuilder|TelegramUser whereCreatedAt($value)
+ * @method static TelegramUserBuilder|TelegramUser whereFirstName($value)
+ * @method static TelegramUserBuilder|TelegramUser whereId($value)
+ * @method static TelegramUserBuilder|TelegramUser whereLanguageCode($value)
+ * @method static TelegramUserBuilder|TelegramUser whereLastName($value)
+ * @method static TelegramUserBuilder|TelegramUser whereUpdatedAt($value)
+ * @method static TelegramUserBuilder|TelegramUser whereUsername($value)
+ * @mixin \Eloquent
  */
-class TelegramUser extends AbstractModel
+class TelegramUser extends Model
 {
     use HasFactory;
 
@@ -34,9 +46,13 @@ class TelegramUser extends AbstractModel
         'language_code',
     ];
 
-    public function scopeChatId(Builder $query, int|string $chatId): void
+    /**
+     * @param Builder $query
+     * @return TelegramUserBuilder
+     */
+    public function newEloquentBuilder($query): TelegramUserBuilder
     {
-        $query->where('chat_id', $chatId);
+        return new TelegramUserBuilder($query);
     }
 
     public function setting(): HasOne

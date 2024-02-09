@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum SubscriptionType: int
 {
-    case ACTIVE = 1;
-    case NONACTIVE = 0;
+    case Active = 1;
+    case NonActive = 0;
 }

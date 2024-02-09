@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Builders\SubscriptionBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,15 +10,21 @@ use Illuminate\Database\Eloquent\Model;
  * App\Models\Subscription
  *
  * @property int $id
- * @property bool|int $is_active
+ * @property int $is_active
  * @property int $telegram_user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Subscription telegramUserId(int $id)
- * @method static \App\Models\Subscription create(array $data)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Subscription find(int $id)
+ * @method static SubscriptionBuilder|Subscription newModelQuery()
+ * @method static SubscriptionBuilder|Subscription newQuery()
+ * @method static SubscriptionBuilder|Subscription query()
+ * @method static SubscriptionBuilder|Subscription whereCreatedAt($value)
+ * @method static SubscriptionBuilder|Subscription whereId($value)
+ * @method static SubscriptionBuilder|Subscription whereIsActive($value)
+ * @method static SubscriptionBuilder|Subscription whereTelegramUserId($value)
+ * @method static SubscriptionBuilder|Subscription whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
-class Subscription extends AbstractModel
+class Subscription extends Model
 {
     use HasFactory;
 
@@ -27,12 +33,12 @@ class Subscription extends AbstractModel
         'telegram_user_id',
     ];
 
-    protected $casts = [
-
-    ];
-
-    public function scopeTelegramUserId(Builder $query, int $id): void
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return SubscriptionBuilder
+     */
+    public function newEloquentBuilder($query): SubscriptionBuilder
     {
-        $query->where('telegram_user_id', $id);
+        return new SubscriptionBuilder($query);
     }
 }

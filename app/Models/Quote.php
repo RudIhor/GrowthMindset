@@ -5,24 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Quote
  *
  * @property int $id
  * @property string $content
- * @property ?int $author_id
+ * @property int|null $author_id
  * @property int $category_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Author|null $author
  * @property-read \App\Models\Category $category
- * @method static \Illuminate\Database\Eloquent\Builder inRandomOrder()
- * @method static \App\Models\Quote first()
- * @method static \App\Models\Quote create(array $data)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quote newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Quote newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Quote query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Quote whereAuthorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quote whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quote whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quote whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quote whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Quote whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
-class Quote extends AbstractModel
+class Quote extends Model
 {
     use HasFactory;
 
