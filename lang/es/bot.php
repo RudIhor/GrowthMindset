@@ -10,7 +10,6 @@ return [
     'how_many_quotes' => '¿Me escuchas?',
     'choose_language' => '¿Cuál es su idioma?',
     'language_updated' => '¡El idioma se actualizó correctamente!',
-    'settings_updated' => '¡La configuración se actualizó correctamente!',
-    'start_receive' => 'Empiece a recibir sus cotizaciones: /subscribe',
+    'start_receive' => '¡La configuración se actualizó correctamente! Empiece a recibir sus cotizaciones: /subscribe',
     'my_settings' => "*Cantidad de cotizaciones por día:* *%s* \n\n*Idioma*: *%s*",
 ];

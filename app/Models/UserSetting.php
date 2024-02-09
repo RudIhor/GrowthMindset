@@ -13,9 +13,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $telegram_user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \App\Models\UserSetting create(array $data)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSetting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSetting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSetting query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSetting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSetting whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSetting whereNotificationsPerDay($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSetting whereTelegramUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserSetting whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
-class UserSetting extends AbstractModel
+class UserSetting extends Model
 {
     use HasFactory;
 

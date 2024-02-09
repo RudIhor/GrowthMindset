@@ -10,7 +10,6 @@ return [
     'how_many_quotes' => 'Hörst du mir zu?',
     'choose_language' => 'Was ist deine Sprache?',
     'language_updated' => 'Sprache wurde erfolgreich aktualisiert!',
-    'settings_updated' => 'Einstellungen wurden erfolgreich aktualisiert!',
-    'start_receive' => 'Erhalten Sie Ihre Angebote: /subscribe',
+    'start_receive' => 'Einstellungen wurden erfolgreich aktualisiert! Erhalten Sie Ihre Angebote: /subscribe',
     'my_settings' => '*Anzahl der Angebote pro Tag:* *%s* \n\n*Sprache*: *%s*'
 ];
