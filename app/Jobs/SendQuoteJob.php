@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Actions\Quote\SendQuoteAction;
 use App\Models\TelegramUser;
+use App\Services\DecisiveStatementService;
 use App\Services\QuoteService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -32,9 +33,9 @@ class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilPr
      * @param QuoteService $quoteService
      * @return void
      */
-    public function handle(QuoteService $quoteService): void
+    public function handle(QuoteService $quoteService, DecisiveStatementService $decisiveStatementService): void
     {
-        (new SendQuoteAction($this->telegramUser))->execute($quoteService);
+        (new SendQuoteAction($this->telegramUser))->execute($quoteService, $decisiveStatementService);
     }
 
     /**

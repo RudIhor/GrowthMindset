@@ -4,6 +4,7 @@ namespace App\Actions\Quote;
 
 use App\Jobs\SendQuoteJob;
 use App\Models\TelegramUser;
+use App\Services\DecisiveStatementService;
 use App\Services\QuoteService;
 use DefStudio\Telegraph\Facades\Telegraph;
 use Illuminate\Support\Carbon;
@@ -16,7 +17,7 @@ class SendQuoteAction
      * @param QuoteService $quoteService
      * @return void
      */
-    public function execute(QuoteService $quoteService): void
+    public function execute(QuoteService $quoteService, DecisiveStatementService $decisiveStatementService): void
     {
         $start = $this->getStartTime();
         $end = $this->getEndTime();
@@ -24,7 +25,7 @@ class SendQuoteAction
         if ($this->isSubscriptionIsActive()) {
             $seconds = $this->getSecondsAccordingNotificationsAmount();
             if ($this->isNowBetween($start, $end)) {
-                $this->sendQuoteNow($quoteService);
+                $this->sendQuoteNow($quoteService, $decisiveStatementService);
             } elseif ($this->isNowBetween($midnight, $start)) {
                 $seconds = $this->calculateSecondsToTodayStart();
             } else {
@@ -65,10 +66,14 @@ class SendQuoteAction
      * @param QuoteService $quoteService
      * @return void
      */
-    private function sendQuoteNow(QuoteService $quoteService): void
+    private function sendQuoteNow(QuoteService $quoteService, DecisiveStatementService $decisiveStatementService): void
     {
+        $language = $this->telegramUser->language_code;
+        $text = $this->telegramUser->id !== 1
+            ? $quoteService->getRandomQuoteMessage($language)
+            : $decisiveStatementService->getRandomDecisiveStatement($language);
         Telegraph::chat((string) $this->telegramUser->chat_id)
-            ->message($quoteService->getRandomQuoteMessage($this->telegramUser->language_code))
+            ->message($text)
             ->silent()
             ->send();
     }

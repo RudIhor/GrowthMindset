@@ -15,7 +15,7 @@ class StoreLoginDTO extends Data
     public static function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email', 'unique:users, email'],
+            'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ];
     }
