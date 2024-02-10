@@ -23,6 +23,7 @@ class CategorySeeder extends Seeder
             'Family',
             'Motivational',
             'Leadership',
+            'Sugar',
         ];
         array_map(function ($category) {
             DB::table('categories')->insert([
