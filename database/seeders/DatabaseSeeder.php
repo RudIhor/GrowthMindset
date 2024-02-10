@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             AuthorSeeder::class,
             CategorySeeder::class,
             QuoteSeeder::class,
+            DecisiveStatementSeeder::class,
         ]);
     }
 }

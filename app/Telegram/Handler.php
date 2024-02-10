@@ -150,7 +150,7 @@ class Handler extends WebhookHandler
             $telegramUser->setting->notifications_per_day = $notificationsPerDay;
             $telegramUser->setting->save();
         }
-        $this->reply($this->messageService->setNotificationsAmount());
+        Telegraph::chat($this->chat)->message($this->messageService->setNotificationsAmount())->send();
     }
 
     /**
@@ -161,6 +161,5 @@ class Handler extends WebhookHandler
         $this->updateTelegramUserLanguageAction->execute(
             new UpdateTelegramUserLanguageDTO($this->chat->chat_id, $this->data->get('language_code'))
         );
-        $this->reply($this->messageService->setLanguageCode());
     }
 }
