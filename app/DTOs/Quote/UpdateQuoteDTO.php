@@ -6,7 +6,7 @@ use Spatie\LaravelData\Data;
 
 class UpdateQuoteDTO extends Data
 {
-    public string $content;
+    public ?string $content;
     public ?int $author_id;
     public ?int $category_id;
 
