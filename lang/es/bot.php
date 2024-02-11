@@ -12,4 +12,7 @@ return [
     'language_updated' => '¡El idioma se actualizó correctamente!',
     'start_receive' => '¡La configuración se actualizó correctamente! Empiece a recibir sus cotizaciones: /subscribe',
     'my_settings' => "*Cantidad de cotizaciones por día:* *%s* \n\n*Idioma*: *%s*",
+    'rate_us' => 'Calificaciones del 1 (peor) al 5 (mejor)',
+    'rate_our_work' => '¡Ya ha pasado más de un mes desde el lanzamiento de GrowthMindset (ing. pensamiento libre, es decir, no fijo, que es característico de las personas exitosas) Por eso, te pedimos que evalúes el trabajo de nuestro bot, qué beneficio aporta a tu vida, si motiva o no. /rateUs',
+    'set_rating' => 'Gracias :) Y si te gusta nuestro bot, puedes ayudar a agregar citas a nuestro bot. Escribe a: @IhorRud',
 ];
