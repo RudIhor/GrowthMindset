@@ -7,6 +7,7 @@ use Spatie\LaravelData\Support\Validation\ValidationContext;
 
 class StoreDecisiveStatementDTO extends Data
 {
+    public ?int $id;
     public string $content;
     public int $category_id;
 
