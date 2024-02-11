@@ -11,5 +11,8 @@ return [
     'choose_language' => 'Was ist deine Sprache?',
     'language_updated' => 'Sprache wurde erfolgreich aktualisiert!',
     'start_receive' => 'Einstellungen wurden erfolgreich aktualisiert! Erhalten Sie Ihre Angebote: /subscribe',
-    'my_settings' => '*Anzahl der Angebote pro Tag:* *%s* \n\n*Sprache*: *%s*'
+    'my_settings' => '*Anzahl der Angebote pro Tag:* *%s* \n\n*Sprache*: *%s*',
+    'rate_us' => 'Bewertungen von 1 (am schlechtesten) bis 5 (am besten)',
+    'rate_our_work' => 'Seit der Veröffentlichung von GrowthMindset (dt. freies Denken, also nicht festgelegt, was für erfolgreiche Menschen charakteristisch ist) ist bereits mehr als ein Monat vergangen. Deshalb bitten wir Sie, die Arbeit unseres Bots zu bewerten, welchen Nutzen er für Ihr Leben bringt, ob er motiviert oder nicht. /rateUs',
+    'set_rating' => 'Danke :) Und wenn Ihnen unser Bot gefällt, können Sie dabei helfen, Zitate zu unserem Bot hinzuzufügen. Schreiben Sie an: @IhorRud',
 ];

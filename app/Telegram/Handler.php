@@ -2,6 +2,8 @@
 
 namespace App\Telegram;
 
+use App\Actions\Rate\CreateRateAction;
+use App\DTOs\Rate\StoreRateDTO;
 use App\Actions\Subscription\{CreateSubscriptionAction, UpdateSubscriptionAction};
 use App\Actions\TelegramUser\{CreateTelegramUserAction, UpdateTelegramUserLanguageAction};
 use App\Actions\UserSetting\CreateUserSettingAction;
@@ -28,8 +30,9 @@ class Handler extends WebhookHandler
         private readonly QuoteService $quoteService,
         private readonly CreateTelegramUserAction $createTelegramUserAction,
         private readonly CreateSubscriptionAction $createSubscriptionAction,
-        private readonly UpdateSubscriptionAction $updateSubscriptionAction,
         private readonly CreateUserSettingAction $createUserSettingAction,
+        private readonly CreateRateAction $createRateAction,
+        private readonly UpdateSubscriptionAction $updateSubscriptionAction,
         private readonly UpdateTelegramUserLanguageAction $updateTelegramUserLanguageAction,
         private readonly ButtonService $buttonService,
     ) {
@@ -40,7 +43,7 @@ class Handler extends WebhookHandler
     {
         $this->languageCode = TelegramUser::whereChatId((string) $this->message?->from()?->id())->first()->language_code
             ?? $this->message?->from()?->languageCode()
-            ?? LanguageCode::EN->value;
+            ?? LanguageCode::UK->value;
         $this->messageService = new MessageService($this->languageCode);
         parent::setupChat();
     }
@@ -76,6 +79,17 @@ class Handler extends WebhookHandler
         Telegraph::chat($this->chat)
             ->message(__('bot.choose_language', locale: $this->languageCode))
             ->keyboard(Keyboard::make()->buttons($this->buttonService->languageButtons()))
+            ->send();
+    }
+
+    /**
+     * @return void
+     */
+    public function rateUs(): void
+    {
+        Telegraph::chat($this->chat)
+            ->message(__('bot.rate_us', locale: $this->languageCode))
+            ->keyboard(Keyboard::make()->buttons($this->buttonService->rateButtons()))
             ->send();
     }
 
@@ -161,5 +175,13 @@ class Handler extends WebhookHandler
         $this->updateTelegramUserLanguageAction->execute(
             new UpdateTelegramUserLanguageDTO($this->chat->chat_id, $this->data->get('language_code'))
         );
+    }
+
+    public function setRating(): void
+    {
+        $this->createRateAction->execute(
+            new StoreRateDTO($this->chat->chat_id, $this->data->get('value'))
+        );
+        Telegraph::chat($this->chat)->message($this->messageService->setRating())->send();
     }
 }

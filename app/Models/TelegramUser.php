@@ -55,13 +55,27 @@ class TelegramUser extends Model
         return new TelegramUserBuilder($query);
     }
 
+    /**
+     * @return HasOne
+     */
     public function setting(): HasOne
     {
         return $this->hasOne(UserSetting::class);
     }
 
+    /**
+     * @return HasOne
+     */
     public function subscription(): HasOne
     {
         return $this->hasOne(Subscription::class);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function rate(): HasOne
+    {
+        return $this->hasOne(Rate::class);
     }
 }
