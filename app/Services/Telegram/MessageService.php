@@ -4,6 +4,8 @@ namespace App\Services\Telegram;
 
 use App\Enums\LanguageCode;
 
+use const _PHPStan_11268e5ee\__;
+
 class MessageService
 {
     public function __construct(private readonly string $languageCode) {}
@@ -67,5 +69,13 @@ class MessageService
     public function setLanguageCode(): string
     {
         return __('bot.language_updated', locale: $this->languageCode);
+    }
+
+    /**
+     * @return string
+     */
+    public function setRating(): string
+    {
+        return __('bot.set_rating', locale: $this->languageCode);
     }
 }
