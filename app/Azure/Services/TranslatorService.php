@@ -42,9 +42,10 @@ class TranslatorService
                 'client' => $this->client,
                 'text' => $text,
                 'targetLanguage' => $targetLanguage,
+                'message' => $e->getMessage(),
             ]);
 
-            return 'Something went wrong... Please, try later.';
+            return 'Something went wrong... We\'re fixing it.';
         }
     }
 }
