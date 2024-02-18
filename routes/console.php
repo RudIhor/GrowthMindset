@@ -19,16 +19,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Artisan::command('register-commands', function () {
-    /** @var \DefStudio\Telegraph\Models\TelegraphBot $bot */
-    $bot = TelegraphBot::find(1);
-
-    $bot->registerCommands([
-        'start' => 'start your journey',
-        'help' => 'get list of available commands',
-    ])->send();
-});
-
 Artisan::command('test', function () {
     // Ad-hoc testing
 });

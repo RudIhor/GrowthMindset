@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Author\app\Providers\AuthorServiceProvider;
+use Modules\Category\app\Providers\CategoryServiceProvider;
+use Modules\Quote\app\Providers\QuoteServiceProvider;
+use Modules\Telegram\app\Providers\TelegramServiceProvider;
 
 return [
 
@@ -165,9 +169,13 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        AuthorServiceProvider::class,
+        CategoryServiceProvider::class,
+        QuoteServiceProvider::class,
+        AuthorServiceProvider::class,
+        TelegramServiceProvider::class
     ])->toArray(),
 
     /*

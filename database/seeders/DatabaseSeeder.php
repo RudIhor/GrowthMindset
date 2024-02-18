@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Author\database\seeders\AuthorSeeder;
+use Modules\Category\database\seeders\CategorySeeder;
+use Modules\Quote\database\seeders\QuoteSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,7 +20,6 @@ class DatabaseSeeder extends Seeder
             AuthorSeeder::class,
             CategorySeeder::class,
             QuoteSeeder::class,
-            DecisiveStatementSeeder::class,
         ]);
     }
 }
