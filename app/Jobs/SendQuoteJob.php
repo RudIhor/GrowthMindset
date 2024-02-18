@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Quote\app\Jobs;
+namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;

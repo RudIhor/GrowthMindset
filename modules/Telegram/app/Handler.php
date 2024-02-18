@@ -3,11 +3,11 @@
 namespace Modules\Telegram\app;
 
 use App\Enums\Time;
+use App\Jobs\SendQuoteJob;
 use DefStudio\Telegraph\Facades\Telegraph;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use DefStudio\Telegraph\Keyboard\Keyboard;
 use Illuminate\Support\Stringable;
-use Modules\Quote\app\Jobs\SendQuoteJob;
 use Modules\Quote\app\Services\QuoteService;
 use Modules\Telegram\app\Actions\Rate\CreateRateAction;
 use Modules\Telegram\app\Actions\Subscription\CreateSubscriptionAction;
@@ -18,8 +18,8 @@ use Modules\Telegram\app\Actions\TelegramUserSetting\CreateUserSettingAction;
 use Modules\Telegram\app\DTOs\Rate\StoreRateDTO;
 use Modules\Telegram\app\DTOs\Subscription\StoreSubscriptionDTO;
 use Modules\Telegram\app\DTOs\Subscription\UpdateSubscriptionDTO;
-use Modules\Telegram\app\DTOs\TelegramUser\UpdateTelegramUserLanguageDTO;
 use Modules\Telegram\app\DTOs\TelegramUser\StoreTelegramUserDTO;
+use Modules\Telegram\app\DTOs\TelegramUser\UpdateTelegramUserLanguageDTO;
 use Modules\Telegram\app\DTOs\UserSetting\StoreUserSettingDTO;
 use Modules\Telegram\app\Enums\LanguageCode;
 use Modules\Telegram\app\Enums\SubscriptionType;
