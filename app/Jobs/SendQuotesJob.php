@@ -14,7 +14,7 @@ use Modules\Quote\app\Actions\SendQuoteAction;
 use Modules\Quote\app\Services\QuoteService;
 use Modules\Telegram\app\Models\TelegramUser;
 
-class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilProcessing
+class SendQuotesJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilProcessing
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -24,7 +24,7 @@ class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilPr
     public int $tries = 5;
 
     /**
-     * @param \Modules\Telegram\app\Models\TelegramUser $telegramUser
+     * @param TelegramUser $telegramUser
      */
     public function __construct(private readonly TelegramUser $telegramUser) {}
 

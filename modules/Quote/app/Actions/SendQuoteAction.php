@@ -2,7 +2,7 @@
 
 namespace Modules\Quote\app\Actions;
 
-use App\Jobs\SendQuoteJob;
+use App\Jobs\SendQuotesJob;
 use DefStudio\Telegraph\Facades\Telegraph;
 use Illuminate\Support\Carbon;
 use Modules\Quote\app\Services\QuoteService;
@@ -30,7 +30,7 @@ class SendQuoteAction
             } else {
                 $seconds = $this->calculateSecondsToTomorrowStart();
             }
-            SendQuoteJob::dispatch($this->telegramUser)->delay($seconds);
+            SendQuotesJob::dispatch($this->telegramUser)->delay($seconds);
         }
     }
 

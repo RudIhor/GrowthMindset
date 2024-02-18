@@ -9,7 +9,7 @@ use Illuminate\Database\Query\Builder;
 use Modules\Telegram\app\Builders\TelegramUserBuilder;
 
 /**
- * App\Models\TelegramUser
+ * Modules\Telegram\app\Models\TelegramUser
  *
  * @property int $id
  * @property string $first_name
