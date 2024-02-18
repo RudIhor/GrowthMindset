@@ -29,8 +29,7 @@ class SendMessageToEveryone extends Command
     {
         $telegramUsers = TelegramUser::all();
         foreach ($telegramUsers as $telegramUser) {
-            $text = __('bot.rate_our_work', locale: $telegramUser->language_code);
-            Telegraph::chat($telegramUser->chat_id)->message($text)->send();
+            Telegraph::chat($telegramUser->chat_id)->message('Click: /subscribe | Натисни: /subscribe')->send();
         }
     }
 }
