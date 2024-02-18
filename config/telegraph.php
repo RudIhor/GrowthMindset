@@ -1,7 +1,7 @@
 <?php
 
-use App\Telegram\Handler;
 use DefStudio\Telegraph\Telegraph;
+use Modules\Telegram\app\Handler;
 
 return [
     /*

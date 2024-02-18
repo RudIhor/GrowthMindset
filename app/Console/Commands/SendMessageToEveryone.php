@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\TelegramUser;
 use DefStudio\Telegraph\Facades\Telegraph;
 use Illuminate\Console\Command;
+use Modules\Telegram\app\Models\TelegramUser;
 
 class SendMessageToEveryone extends Command
 {

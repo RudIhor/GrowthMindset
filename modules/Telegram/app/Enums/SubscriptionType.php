@@ -1,0 +1,9 @@
+<?php
+
+namespace Modules\Telegram\app\Enums;
+
+enum SubscriptionType: int
+{
+    case Active = 1;
+    case NonActive = 0;
+}
