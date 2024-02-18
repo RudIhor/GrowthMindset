@@ -14,7 +14,7 @@ use Modules\Quote\app\Actions\SendQuoteAction;
 use Modules\Quote\app\Services\QuoteService;
 use Modules\Telegram\app\Models\TelegramUser;
 
-class SendQuotesJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilProcessing
+class SendQuoteJob implements ShouldQueue, ShouldBeUnique, ShouldBeUniqueUntilProcessing
 {
     use Dispatchable;
     use InteractsWithQueue;
