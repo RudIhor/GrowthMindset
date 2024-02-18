@@ -3,7 +3,7 @@
 namespace Modules\Telegram\app;
 
 use App\Enums\Time;
-use App\Jobs\SendQuotesJob;
+use App\Jobs\SendQuoteJob;
 use DefStudio\Telegraph\Facades\Telegraph;
 use DefStudio\Telegraph\Handlers\WebhookHandler;
 use DefStudio\Telegraph\Keyboard\Keyboard;
@@ -111,7 +111,7 @@ class Handler extends WebhookHandler
                 $this->updateSubscriptionAction->execute(
                     new UpdateSubscriptionDTO($this->chat->chat_id, SubscriptionType::Active->value)
                 );
-                SendQuotesJob::dispatch($telegramUser)->delay(Time::Hour->value);
+                SendQuoteJob::dispatch($telegramUser)->delay(Time::Hour->value);
             }
         } else {
             if (empty($telegramUser->setting)) {
@@ -122,7 +122,7 @@ class Handler extends WebhookHandler
             $this->createSubscriptionAction->execute(
                 new StoreSubscriptionDTO($telegramUser->id, SubscriptionType::Active->value)
             );
-            SendQuotesJob::dispatch($telegramUser)->delay(Time::Hour->value);
+            SendQuoteJob::dispatch($telegramUser)->delay(Time::Hour->value);
         }
         $this->reply(__('bot.subscribed', locale: $this->languageCode));
     }
