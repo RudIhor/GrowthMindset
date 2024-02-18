@@ -2,9 +2,9 @@
 
 namespace Modules\Quote\app\Actions;
 
+use App\Jobs\SendQuoteJob;
 use DefStudio\Telegraph\Facades\Telegraph;
 use Illuminate\Support\Carbon;
-use Modules\Quote\app\Jobs\SendQuoteJob;
 use Modules\Quote\app\Services\QuoteService;
 use Modules\Telegram\app\Models\TelegramUser;
 
