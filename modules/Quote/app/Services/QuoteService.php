@@ -16,14 +16,11 @@ class QuoteService
     {
         /** @var Quote $quote */
         $quote = Quote::query()->inRandomOrder()->first();
-
         $text = $quote->content;
-        $authorName = $quote->author->full_name ?? '👤';
-        $categoryName = $quote->category->name;
+        $authorName = $this->getAuthorName($quote);
 
         if (LanguageCode::isTranslationable($languageCode)) {
             $authorName = $this->translatorService->translate($authorName, $languageCode);
-            $categoryName = $this->translatorService->translate($categoryName, $languageCode);
             if ($quote->category_id !== 12) {
                 $text = $quote->author?->full_name . ' said* ' . $quote->content;
                 $text = $this->translatorService->translate($text, $languageCode);
@@ -33,7 +30,7 @@ class QuoteService
             }
         }
 
-        return sprintf("*%s*\n✍️: %s\n🗂️: %s", $text, $authorName, $categoryName);
+        return sprintf("*%s*\n\n%s", $text, $authorName);
     }
 
     /**
@@ -51,5 +48,20 @@ class QuoteService
     public function getQuote(Quote $quote): StoreQuoteDTO
     {
         return StoreQuoteDTO::from($quote);
+    }
+
+    /**
+     * Get author's name.
+     *
+     * @param Quote $quote
+     * @return string
+     */
+    private function getAuthorName(Quote $quote): string
+    {
+        if ($quote->author?->full_name) {
+            return  '© ' . $quote->author->full_name;
+        }
+
+        return '👤';
     }
 }
