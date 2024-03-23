@@ -13,7 +13,6 @@ class AuthorSeeder extends Seeder
     public function run(): void
     {
         $authors = [
-            ['None', ''],
             ['Me', ''],
             ['Wladimir', 'Klitschko'],
             ['Robert', 'Kiyosaki'],
