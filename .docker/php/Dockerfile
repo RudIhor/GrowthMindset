@@ -20,7 +20,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     zip \
     unzip \
-    gnupg2
+    gnupg2 \
+    default-mysql-client
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN apt-get update

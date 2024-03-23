@@ -30,7 +30,7 @@ class QuoteService
             }
         }
 
-        return sprintf("*%s*\n\n%s", $text, $authorName);
+        return sprintf("%s\n\n%s", $text, $authorName);
     }
 
     /**
@@ -62,6 +62,6 @@ class QuoteService
             return  '© ' . $quote->author->full_name;
         }
 
-        return '👤';
+        return '';
     }
 }
