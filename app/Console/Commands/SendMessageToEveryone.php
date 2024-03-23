@@ -6,6 +6,8 @@ use DefStudio\Telegraph\Facades\Telegraph;
 use Illuminate\Console\Command;
 use Modules\Telegram\app\Models\TelegramUser;
 
+use const _PHPStan_11268e5ee\__;
+
 class SendMessageToEveryone extends Command
 {
     /**
@@ -13,7 +15,7 @@ class SendMessageToEveryone extends Command
      *
      * @var string
      */
-    protected $signature = 'telegram:send-message-to-everyone';
+    protected $signature = 'send-message-to-everyone';
 
     /**
      * The console command description.
@@ -29,7 +31,7 @@ class SendMessageToEveryone extends Command
     {
         $telegramUsers = TelegramUser::all();
         foreach ($telegramUsers as $telegramUser) {
-            Telegraph::chat($telegramUser->chat_id)->message('Click: /subscribe | Натисни: /subscribe')->send();
+            Telegraph::chat($telegramUser->chat_id)->message(__('bot.new-release', locale: $telegramUser->language_code))->send();
         }
     }
 }
