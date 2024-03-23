@@ -6,8 +6,6 @@ use DefStudio\Telegraph\Facades\Telegraph;
 use Illuminate\Console\Command;
 use Modules\Telegram\app\Models\TelegramUser;
 
-use const _PHPStan_11268e5ee\__;
-
 class SendMessageToEveryone extends Command
 {
     /**
