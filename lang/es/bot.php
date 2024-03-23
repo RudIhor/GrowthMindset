@@ -15,4 +15,5 @@ return [
     'rate_us' => 'Calificaciones del 1 (peor) al 5 (mejor)',
     'rate_our_work' => '¡Ya ha pasado más de un mes desde el lanzamiento de GrowthMindset (ing. pensamiento libre, es decir, no fijo, que es característico de las personas exitosas) Por eso, te pedimos que evalúes el trabajo de nuestro bot, qué beneficio aporta a tu vida, si motiva o no. /rateUs',
     'set_rating' => 'Gracias :) Y si te gusta nuestro bot, puedes ayudar a agregar citas a nuestro bot. Escribe a: @IhorRud',
+    'new-release' => '¡Nueva actualización! Puedes echar un vistazo aquí: t.me/growthmindsetdevelop',
 ];

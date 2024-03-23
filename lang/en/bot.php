@@ -15,4 +15,5 @@ return [
     'rate_us' => 'Rate us from 1 (worst) to 5 (best)',
     'rate_our_work' => 'More than a month has already passed since the release of GrowthMindset (eng. free thinking, that is, not fixed, which is characteristic of successful people) Therefore, we ask you to evaluate the work of our bot, what benefit it brings to your life, whether it motivates or not. /rateUs',
     'set_rating' => 'Thanks :) And if you like our bot you can help add quotes to our bot. Write to: @IhorRud',
+    'new-release' => 'New update! Check here: t.me/growthmindsetdevelop',
 ];
