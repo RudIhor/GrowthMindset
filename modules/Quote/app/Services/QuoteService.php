@@ -6,6 +6,8 @@ use App\Azure\Services\TranslatorService;
 use Modules\Author\app\Models\Author;
 use Modules\Category\app\Models\Category;
 use Modules\Quote\app\DTOs\StoreQuoteDTO;
+use Modules\Quote\app\Http\Resources\QuoteCollection;
+use Modules\Quote\app\Http\Resources\QuoteResource;
 use Modules\Quote\app\Models\Quote;
 use Modules\Telegram\app\Enums\LanguageCode;
 use Spatie\LaravelData\PaginatedDataCollection;
@@ -24,7 +26,7 @@ class QuoteService
         $authorName = $this->getAuthorName($quote->author);
 
         if (LanguageCode::isTranslationable($languageCode)) {
-            if ($quote->category_id !== 12) {
+            if ($quote->category->name !== 'Positive Statements') {
                 $text = $quote->author?->full_name . ' said* ' . $quote->content;
                 $text = $this->translatorService->translate($text, $languageCode);
                 $text = str_replace('*', '', substr($text, (int)strpos($text, '*') + 2));
@@ -38,7 +40,7 @@ class QuoteService
 
     public function getRandomQuoteFromCategoryWithTranslation(Category $category, string $languageCode): string
     {
-        $quote = Quote::query()->where('category_id', $category->id)->inRandomOrder()->first();
+        $quote = $category->quotes()->inRandomOrder()->first();
         $authorName = $this->getAuthorName($quote->author);
         $text = $this->translatorService->translate($quote->content, $languageCode);
 
@@ -46,20 +48,20 @@ class QuoteService
     }
 
     /**
-     * @return PaginatedDataCollection
+     * @return \Modules\Quote\app\Http\Resources\QuoteCollection
      */
-    public function getQuotes(): PaginatedDataCollection
+    public function getQuotes(): QuoteCollection
     {
-        return StoreQuoteDTO::collection(Quote::query()->paginate(25));
+        return QuoteCollection::make(Quote::query()->paginate(25));
     }
 
     /**
      * @param Quote $quote
-     * @return StoreQuoteDTO
+     * @return \Modules\Quote\app\Http\Resources\QuoteResource
      */
-    public function getQuote(Quote $quote): StoreQuoteDTO
+    public function getQuote(Quote $quote): QuoteResource
     {
-        return StoreQuoteDTO::from($quote);
+        return new QuoteResource($quote);
     }
 
     /**
