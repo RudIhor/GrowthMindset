@@ -3,8 +3,9 @@
 namespace Modules\Quote\app\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Modules\Category\app\Models\Category;
 use Modules\Quote\app\Actions\CreateQuoteAction;
 use Modules\Quote\app\Actions\DeleteQuoteAction;
 use Modules\Quote\app\Actions\UpdateQuoteAction;
@@ -30,11 +31,23 @@ class QuoteController extends Controller
 
     /**
      * @param Quote $quote
-     * @return \Modules\Quote\app\DTOs\StoreQuoteDTO
+     * @return StoreQuoteDTO
      */
     public function show(Quote $quote): StoreQuoteDTO
     {
         return $this->quoteService->getQuote($quote);
+    }
+
+    /**
+     * @param Category $category
+     * @param Request $request
+     * @return string
+     */
+    public function getRandomQuoteFromCategoryWithTranslation(int $categoryId, Request $request): string
+    {
+        $category = Category::findOrFail($categoryId);
+
+        return $this->quoteService->getRandomQuoteFromCategoryWithTranslation($category, $request->get('language_code'));
     }
 
     /**
@@ -61,7 +74,7 @@ class QuoteController extends Controller
     /**
      * @param Quote $quote
      * @param DeleteQuoteAction $deleteQuoteAction
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy(Quote $quote, DeleteQuoteAction $deleteQuoteAction): Response
     {
