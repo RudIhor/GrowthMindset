@@ -20,6 +20,7 @@ class QuoteResource extends JsonResource
         return [
             'id' => $this->resource->id,
             'content' => $this->resource->content,
+            'author_id' => $this->resource->author->id,
             'created_at' => $this->resource->created_at,
         ];
     }
