@@ -5,6 +5,7 @@ namespace Modules\Quote\app\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Modules\Author\app\Models\Author;
 use Modules\Category\app\Models\Category;
 
@@ -14,7 +15,6 @@ use Modules\Category\app\Models\Category;
  * @property int $id
  * @property string $content
  * @property int|null $author_id
- * @property int $category_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Modules\Author\app\Models\Author|null $author
@@ -37,7 +37,6 @@ class Quote extends Model
     protected $fillable = [
         'content',
         'author_id',
-        'category_id',
     ];
 
     /**
@@ -51,8 +50,8 @@ class Quote extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function category(): BelongsTo
+    public function categories(): BelongsToMany
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'quote_category', 'quote_id', 'category_id');
     }
 }
