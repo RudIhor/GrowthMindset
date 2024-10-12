@@ -39,14 +39,19 @@ class QuoteSeeder extends Seeder
             ["Don't say to yourself: What's going to happen? Ask yourself: What can I do? Be the driving force of your own life", 3, 3],
             ['(Discipline + Efforts) * Time = Result', 18, 4],
         ];
-        array_map(function($quote) {
+
+        $count = count($quotes);
+        for ($i = 1; $i < $count; $i++) {
             DB::table('quotes')->insert([
-                'content' => $quote[0],
-                'author_id' => $quote[1],
-                'category_id' => $quote[2],
+                'content' => $quotes[$i][0],
+                'author_id' => $quotes[$i][1],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }, $quotes);
+            DB::table('quote_category')->insert([
+                'quote_id' => $i,
+                'category_id' => $quotes[$i][2],
+            ]);
+        }
     }
 }
