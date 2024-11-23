@@ -8,7 +8,7 @@ use Illuminate\Http\Response;
 use Modules\Author\app\Actions\{UpdateAuthorAction};
 use Modules\Author\app\Actions\CreateAuthorAction;
 use Modules\Author\app\Actions\DeleteAuthorAction;
-use Modules\Author\app\DTOs\{StoreAuthorDTO};
+use Modules\Author\app\DTOs\{Requests\AuthorRequestDTO, StoreAuthorDTO};
 use Modules\Author\app\DTOs\UpdateAuthorDTO;
 use Modules\Author\app\Models\Author;
 use Modules\Author\app\Services\AuthorService;
@@ -23,9 +23,9 @@ class AuthorController extends Controller
     /**
      * @return PaginatedDataCollection
      */
-    public function index(): PaginatedDataCollection
+    public function index(AuthorRequestDTO $request): PaginatedDataCollection
     {
-        return $this->authorService->getAuthors();
+        return $this->authorService->getAuthors($request);
     }
 
     /**
