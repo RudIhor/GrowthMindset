@@ -5,12 +5,10 @@ namespace Modules\Quote\app\Services;
 use App\Azure\Services\TranslatorService;
 use Modules\Author\app\Models\Author;
 use Modules\Category\app\Models\Category;
-use Modules\Quote\app\DTOs\StoreQuoteDTO;
 use Modules\Quote\app\Http\Resources\QuoteCollection;
 use Modules\Quote\app\Http\Resources\QuoteResource;
 use Modules\Quote\app\Models\Quote;
 use Modules\Telegram\app\Enums\LanguageCode;
-use Spatie\LaravelData\PaginatedDataCollection;
 
 class QuoteService
 {
@@ -18,18 +16,24 @@ class QuoteService
     {
     }
 
+    /**
+     * @param string $languageCode
+     * @return string
+     */
     public function getRandomQuoteMessage(string $languageCode = 'en'): string
     {
         /** @var Quote $quote */
         $quote = Quote::query()->inRandomOrder()->first();
-        $text = $quote->content;
+
+        $separator = ':> ';
+        $text = 'This is a famous quote' . $separator . $quote->content;
         $authorName = $this->getAuthorName($quote->author);
 
         if (LanguageCode::isTranslationable($languageCode)) {
             $text = $this->translatorService->translate($text, $languageCode);
         }
 
-        return sprintf("%s\n\n%s", $text, $authorName);
+        return sprintf("%s\n\n%s", explode($separator, $text)[1], $authorName);
     }
 
     public function getRandomQuoteFromCategoryWithTranslation(Category $category, string $languageCode): string
@@ -42,7 +46,7 @@ class QuoteService
     }
 
     /**
-     * @return \Modules\Quote\app\Http\Resources\QuoteCollection
+     * @return QuoteCollection
      */
     public function getQuotes(): QuoteCollection
     {
@@ -51,7 +55,7 @@ class QuoteService
 
     /**
      * @param Quote $quote
-     * @return \Modules\Quote\app\Http\Resources\QuoteResource
+     * @return QuoteResource
      */
     public function getQuote(Quote $quote): QuoteResource
     {
@@ -61,7 +65,7 @@ class QuoteService
     /**
      * Get author's name.
      *
-     * @param Quote $quote
+     * @param Author|null $author
      * @return string
      */
     private function getAuthorName(?Author $author): string
